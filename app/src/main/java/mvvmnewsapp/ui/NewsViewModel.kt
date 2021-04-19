@@ -3,6 +3,8 @@ package mvvmnewsapp.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import mvvmnewsapp.models.NewsResponse
 import mvvmnewsapp.repository.NewsRepository
@@ -13,10 +15,15 @@ class NewsViewModel(
     val newsRepository: NewsRepository
 ) : ViewModel() {
 
-    val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    // val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    // val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+
+    private val _breakingNewsUiState = MutableStateFlow<Resource<NewsResponse>>(Resource.Empty())
+    val breakingNewsUiState: StateFlow<Resource<NewsResponse>> = _breakingNewsUiState
     var breakingNewsPage = 1
 
-    val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    private val _searchNewsUiState = MutableStateFlow<Resource<NewsResponse>>(Resource.Empty())
+    val searchNewsUiState: StateFlow<Resource<NewsResponse>> = _searchNewsUiState
     var searchNewsPage = 1
 
     init {
@@ -24,15 +31,19 @@ class NewsViewModel(
     }
 
     fun getBreakingNews(countryCode: String) = viewModelScope.launch {
-        breakingNews.postValue(Resource.Loading())
+//        breakingNews.postValue(Resource.Loading())
+        _breakingNewsUiState.value = Resource.Loading()
         val response = newsRepository.getBreakingNews(countryCode, breakingNewsPage)
-        breakingNews.postValue(handleBreakingNewsResponse(response))
+        _breakingNewsUiState.value = handleBreakingNewsResponse(response)
+//        breakingNews.postValue(handleBreakingNewsResponse(response))
     }
 
     fun searchNews(searchQuery: String) = viewModelScope.launch {
-        searchNews.postValue(Resource.Loading())
+//        searchNews.postValue(Resource.Loading())
+        _searchNewsUiState.value = Resource.Loading()
         val response = newsRepository.searchNews(searchQuery, searchNewsPage)
-        searchNews.postValue(handleSearchNewsResponse(response))
+        _searchNewsUiState.value = handleSearchNewsResponse(response)
+//        searchNews.postValue(handleSearchNewsResponse(response))
     }
 
     private fun handleBreakingNewsResponse(response: Response<NewsResponse>) : Resource<NewsResponse> {

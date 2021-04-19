@@ -49,6 +49,9 @@ dependencies {
     // Architectural Components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 
+    // Activity KTX for viewModels()
+    implementation "androidx.activity:activity-ktx:1.2.2"
+
     // Room
     implementation "androidx.room:room-runtime:2.2.6"
     kapt "androidx.room:room-compiler:2.2.6"
