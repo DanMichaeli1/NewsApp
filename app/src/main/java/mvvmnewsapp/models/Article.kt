@@ -2,8 +2,9 @@ package mvvmnewsapp.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
-// Entity : this Article class is a table in our DB
+// Entity : this Article class represents a table in our DB
 @Entity(
     tableName = "articles"
 )
@@ -20,4 +21,4 @@ data class Article(
     val title: String,
     val url: String,
     val urlToImage: String
-)
+) : Serializable

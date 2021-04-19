@@ -18,6 +18,6 @@ interface ArticleDao {
 
     // Delete an article
     @Delete
-    suspend fun deletearticle(article: Article)
+    suspend fun deleteArticle(article: Article)
 
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import mvvmnewsapp.models.Article
 import mvvmnewsapp.models.NewsResponse
 import mvvmnewsapp.repository.NewsRepository
 import mvvmnewsapp.utils.Resource
@@ -27,7 +28,7 @@ class NewsViewModel(
     var searchNewsPage = 1
 
     init {
-        getBreakingNews("il")
+        getBreakingNews("us")
     }
 
     fun getBreakingNews(countryCode: String) = viewModelScope.launch {
@@ -62,5 +63,15 @@ class NewsViewModel(
             }
         }
         return  Resource.Error(response.message())
+    }
+
+    fun saveArticle(article: Article) = viewModelScope.launch {
+        newsRepository.upsert(article)
+    }
+
+    fun getSavedNews() = newsRepository.getSavedNews()
+
+    fun deleteArticle(article: Article) = viewModelScope.launch {
+        newsRepository.deleteArticle(article)
     }
 }

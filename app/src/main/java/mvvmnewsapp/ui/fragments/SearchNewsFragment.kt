@@ -7,6 +7,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.R
 import kotlinx.android.synthetic.main.fragment_search_news.*
@@ -32,6 +33,17 @@ class SearchNewsFragment  : Fragment(R.layout.fragment_search_news) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
+
+        // Attaching clicked article to Navigation Components
+        newsAdapater.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("article", it)
+            }
+            findNavController().navigate(
+                    R.id.action_searchNewsFragment_to_articleFragment,
+                    bundle
+            )
+        }
 
         // Adding delay for searching after text is typed with coroutine
         var job: Job? = null
